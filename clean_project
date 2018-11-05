@@ -1,0 +1,10 @@
+cd SRC
+make clean
+cd ..
+cd TEST_DATA
+clean_test_data
+cd ..
+cd DOCUMENTATION
+make clean
+cd ..
+

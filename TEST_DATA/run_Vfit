@@ -1,0 +1,28 @@
+# Check that we have three command line inputs: filename, model_order and max_iterations
+if [ "$#" = "3" ] ; then
+
+NAME=$1
+ORDER=$2
+MAX_ITS=$3
+
+
+else
+
+  echo "run as follows:
+  run_Vfit filename model_order max_iterations
+  example:
+  run_Vfit CAPACITOR_CJS_Z.CSV 1 2 "
+  exit 1
+  
+fi
+
+echo "$NAME
+$ORDER
+$MAX_ITS
+" > Vfit_in.txt
+
+../SRC/Vfit < Vfit_in.txt
+
+gnuplot plot.plt
+
+

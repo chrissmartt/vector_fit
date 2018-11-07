@@ -1,3 +1,19 @@
+! This file forms part of the VECTOR_FIT project
+!
+! Simple Implementation of the Vector fitting process
+!
+! B. Gustavsen and A. Semlyen, "Rational Approximation 
+! of Frequency Domain Responses by Vector Fitting", IEEE 
+! Trans. Power Delivery, vol. 14, No. 3, July 1999, pp. 1052-1061.
+! 
+! VECTOR_FIT uses the EISPACK library (this file). EISPACK is subject to 
+! the GNU Lesser General Public License. A copy of the GNU Lesser General Public 
+! License version can be found in the file COPPYING.LESSER.txt 
+! or at <http://www.gnu.org/licenses/>.
+! 
+! The University of Nottingham can be contacted at: ggiemr@nottingham.ac.uk
+!
+
 subroutine bakvec ( n, t, e, m, z, ierr )
 
 !*****************************************************************************80

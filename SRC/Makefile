@@ -3,6 +3,7 @@ OBJS=read_data_from_file.o set_test_data.o update_poles.o calculate_residues.o c
 
 Vfit: Vfit.F90 $(OBJS)
 	f95 -o Vfit Vfit.F90 $(OBJS)
+	mv Vfit ../bin
         
 read_data_from_file.o: read_data_from_file.F90
 	f95 -c read_data_from_file.F90

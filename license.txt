@@ -1,0 +1,22 @@
+ 
+
+LICENSE ( last update: November 2018 )
+--------------------------------------------
+
+There are 2 license types used in the VECTOR_FIT project.
+
+
+GPL - GNU General Public License v.3
+See COPYING in root
+
+LGPL - GNU Lesser General Public License v.3
+See COPYING.LESSER in root
+
+These licenses are applied as follows:
+
+GPL: 
+Applies to all source coded with the exception of the eispack library in /SRC/eispack
+
+LGPL
+Applies to the eispack library in /SRC/eispack.F90
+

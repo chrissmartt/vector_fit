@@ -21,7 +21,7 @@ $ORDER
 $MAX_ITS
 " > Vfit_in.txt
 
-../SRC/Vfit < Vfit_in.txt
+../bin/Vfit < Vfit_in.txt
 
 gnuplot plot.plt
 

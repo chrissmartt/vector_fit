@@ -1,3 +1,104 @@
 \section{Vector fitting Software} \label{software}
 
+The software may be compiled in a unix type operating system by going into the SRC/ directory and using the command
+
+make
+
+The makefile may need to be altered for different compilers or to apply specific compilation flags for example. The Makefile in SRC/ is designed to use the f95 gfortran compiler. The executable file, Vfit, is moved to the bin directory.
+
+\subsection{Running Vfit}
+
+The complex frequency domain data which Vfit fits a model to should be in an ascii file with three columns: frequency, real part of the function at this frequency, imaginary part of function at this frequency. Data for each frequency should be on a sperate line. An example file is shown below:
+
+\begin{verbatim}
+   1000.00000       8.50000009E-02  -159.154678         
+   1059.56042       8.50000009E-02  -150.208176         
+   1122.66772       8.50000009E-02  -141.764648         
+   1189.53442       8.50000009E-02  -133.795685         
+   1260.38281       8.50000009E-02  -126.274742         
+       .                .                 .
+       .                .                 .
+       .                .                 .
+   79340968.0       8.50000009E-02   21.4340954         
+   84066512.0       8.50000009E-02   22.7109394         
+   89073600.0       8.50000009E-02   24.0638466         
+   94378816.0       8.50000009E-02   25.4972954         
+   100000000.       8.50000009E-02   27.0161057         
+\end{verbatim}
+
+The vector fitting process is run with the command
+
+Vfit
+
+A number of command line arguments may be added to configure the vector fitting process. These are as follows:
+
+\begin{verbatim}
+    const:    include the constant term (d) in the fit function
+    noconst:  do not include the constant term
+    sterm:    include the s term (h) in the fit function
+    nosterm:  do not include the s term (h) in the fit function
+    logf:     use logarithmically spaced starting poles
+    nologf:   use linearly spaced starting poles
+    cmplx:    use complex starting poles
+    nocmplx:  use real starting poles
+\end{verbatim}
+
+The default is to include both the constant (d) term and the s term (h) and to use linearly spaced complex poles.
+
+For example to use logarithmically spaced, real starting poles use the command
+
+Vfit logf nocmplx
+
+When Vfit is run the user is propted for the file name for the input frequency domain data. Once this is read successfully the user is propted for the model order to fit and then the number of iterations of the fitting process to perform.
+
+The output of the Vfit program are the following:
+
+1. A file Vfit.filter containing the pole-residue representation of the input function for the specified model order.
+The format of the function uses a normalised angular frequency where the angular frequency normalisation (wnorm) is based on the
+maximum frequency in the input data. The function is therefore of the form
+
+\begin{equation}\label{eq:vf1}
+f' \left( s \right) = d+\frac{s}{wnorm} h+\sum_{n=1}^N \frac{c_n}{\frac{s}{wnorm}-a_n} 
+\end{equation} 
+
+At the end of the file is the (normalised) frequency range and number of samples in the input data.
+
+\begin{small}
+\begin{verbatim}
+Vfit filter output
+           1  # order
+   628318530.71795857       # wnorm
+   8.5000000899999470E-002  # d
+   27.017695590661077       # h
+                   pole (a)                              residue (c)
+-1.12842870712061E-021 0.00000000000000   1.59154949383951E-003 0.00000000000000     
+            wnorm_min             wnorm_max                  nw
+1.0000000000000001E-005   1.0000000000000000              200
+\end{verbatim}
+\end{small}
+
+This output format is compatible with the network\_synthesis process \cite{netowrk_synthesis} which may be used to generate Spice models for passive frequency dependent impedance functions. The combination of vector fitting and network synthesis processes may be run efficiently using the script in the Spice\_impedance\_synthesis project \cite{spice_impedance_synthesis}.
+
+As well as the function fit output, a data file (function\_data.fout) containing both the input data and the function fit data at the discrete frequencies specified in the input file is produced. This is an ascii file and the format of the data is:
+
+\begin{verbatim}
+frequency     Re{f)    Im{f}    |f|     Re{f_fit)    Im{f_fit}    |f_fit|      
+\end{verbatim}
+
+The data in this file may be plotted by gnuplot for example to show a comparison between the input data and the model fit (see section \ref{examples}.
+
+In addition to the output files, the output to the screen shows the initial poles, the error at each iteration and the final function fit coefficients.
+
+\begin{verbatim}
+         initial poles (w)             intitial poles (f)           
+ ( -4712.38916    ,  0.00000000 ) ( -750.000000  ,  0.00000000 )
+
+ Iteration:           1  error=   1.8246864240496829E-006
+ Iteration:           2  error=   1.8246864240496765E-006
+
+ d=   8.50000009E-02
+ h=   4.29999965E-08
+               pole (a)                      residue (c)
+ ( -7.09012655E-13,  0.00000000 ) (  1000000.06  ,  0.00000000 )
+\end{verbatim}
 

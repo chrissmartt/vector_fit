@@ -1,6 +1,6 @@
 Apply the vector fitting process to test data with
 
-../SRC/Vfit
+../bin/Vfit
 
 Then follow the prompts for the data filename, model order, max iterations.
 

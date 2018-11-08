@@ -22,7 +22,7 @@ pause -1
 
 set autoscale x
 set autoscale y
-set logscale x
+set nologscale x
 set logscale y
 plot  "function_data.fout" u 1:4 title "|f|" w p ,\
      "function_data.fout" u 1:7 title "|f_fit|" w l
@@ -30,7 +30,7 @@ pause -1
 
 set autoscale x
 set autoscale y
-set nologscale x
+set logscale x
 set logscale y
 plot  "function_data.fout" u 1:4 title "|f|" w p ,\
      "function_data.fout" u 1:7 title "|f_fit|" w l

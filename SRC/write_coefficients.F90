@@ -30,7 +30,7 @@
 !
 ! Author C Smartt
 !
-SUBROUTINE write_coefficients(order,a,c,c_hat,d,h,fmin,fmax)
+SUBROUTINE write_coefficients(order,a,c,c_hat,d,h,fmin,fmax,nf)
 
 IMPLICIT NONE
 
@@ -41,6 +41,7 @@ complex*16 :: c_hat(order)
 real*8 :: d
 real*8 :: h
 real*8 :: fmin,fmax
+integer :: nf
 
 ! local variables
 
@@ -68,13 +69,13 @@ real*8,parameter     :: pi=3.1415926535897931d0
   write(50,*)wnorm,' # wnorm'
   write(50,*)d,' # d'
   write(50,*)h*wnorm,' # h'
-  write(50,*)'               pole (a)                          residue (c)'
+  write(50,*)'                       pole (a)                                         residue (c)'
   do i=1,order
     write(50,*)dble(a(i)/wnorm),imag(a(i)/wnorm),dble(c(i)/wnorm),imag(c(i)/wnorm)
   end do 
   
-  write(50,*)'wnorm_min   wnorm_max      nw'
-  write(50,*)fmin/fmax, 1d0 ,200
+  write(50,*)'            wnorm_min             wnorm_max                  nw'
+  write(50,*)fmin/fmax, 1d0 ,nf
   
   close(unit=50)
   

@@ -1,4 +1,102 @@
 \section{Vector Fitting}\label{vector_fit}
 
+The starting point is a set of complex frequency domain transfer function data, $f(s_i)$, provided at a discrete set of (complex) frequencies $s_i=j 2 \pi f_i, i=1..M$ i.e. discrete samples of an underlying function $f(s)$.
+The vector fitting process generates a rational function approximation to $f(s)$ \cite{vfit1}. The rational function approximation to $f(s)$ is expressed in pole-residue format:  
+
+\begin{equation}\label{eq:vf1}
+f' \left( s \right) = d+sh+\sum_{n=1}^N \frac{c_n}{s-a_n} \approx f(s)
+\end{equation} 
+
+where c\_n are the poles and a\_n are the corresponding residues, d is a constant term and h is the coefficient of the term which is linear in s. The poles and residues are either real or come in complex conjugate pairs. The vector fitting process is an iterative procedure which provides estimates of the poles, residues, d and h such that the function $f'(s)$ approximates the original function $f(s)$.
+
+Stage 1 of the process is pole identification. In order to start the process a set of starting poles, $a'_n$ is specified. In reference \cite{vfit1} it is recommended that for functions with distinct resonant peaks the starting poles should be complex conjugate pairs with imaginary parts distributed linearly over the frequency range for which data $f(s_i)$ is available. i.e.
+
+\begin{equation}\label{eq:vf2}
+\begin{array}{rcl}
+a'_n & = & -\alpha+j\beta \\
+a'_{n+1} & = & -\alpha-j\beta \\
+\alpha & = & \frac{\beta}{100}
+\end{array}
+\end{equation} 
+
+For smooth functions real poles linearly or logarithmically spread over the frequency range for which data is available is recommended. 
+
+An unknown 'weighting function', $\sigma(s)$, is introduced where $\sigma(s)$ is approximated by a rational function $\sigma'(s)$. The product  $\sigma(s)f(s)$ is also approximated as a rational function $(\sigma(s)f(s))_{fit}$. $\sigma'(s)$ has the same poles, $a'_n$, as $(\sigma(s)f(s))_{fit}$, thus we have:
+
+\begin{equation}\label{eq:vf3}
+\left[\begin{array}{c} (\sigma(s)f(s))_{fit} \\[10pt] \sigma'(s) \end{array}\right]
+=
+\left[\begin{array}{c}
+d+sh+\sum_{n=1}^N \frac{c_n}{s-a'_n} 
+\\[10pt] 
+1+\sum_{n=1}^N \frac{c'_n}{s-a'_n} 
+\sigma(s) \end{array}\right]
+\end{equation} 
+
+A linear equation in the unknowns $c_n$, $c'_n$, $d$ and $h$ is obtained by  multiplying the second equation by $f(s_i)$ and setting
+
+\begin{equation}\label{eq:vf4a}
+(\sigma(s)f(s))_{fit}=\sigma'(s)f(s)
+\end{equation} 
+i.e.
+\begin{equation}\label{eq:vf4}
+d+s_i h+\sum_{n=1}^N \frac{c_n}{s_i-a'_n} = \left( 1+\sum_{n=1}^N \frac{c'_n}{s_i-a'_n} \right) f(s_i)
+\end{equation} 
+
+A set of $M$ equations may be developed by writing equation \ref{eq:vf4} for all $i, i=1..M$. Provided $M > 2N+2$ we have an over determined system of linear equations which may be solved for $c_n$, $c'_n$, $d$ and $h$ in a least squares sense, for example via the Morse Penrose pseudo inverse method \cite{numerical_recipes}.
+
+Details of the formulation of the matrix equation may be found in Appendix A of \cite{vfit1}.
+
+From equation \ref{eq:vf4a} we can write the rational function approximation, $f'(s)$, to $f(s)$ as
+
+\begin{equation}\label{eq:vf5}
+f'(s)=\frac{(\sigma(s)f(s))_{fit}}{\sigma'(s)}
+\end{equation} 
+
+If $(\sigma(s)f(s))_{fit}$ and $\sigma'(s)$ are written in pole-zero form taking note that the poles of both these functions are the same and are equal to the starting poles, $a'_n$ then
+
+\begin{equation}\label{eq:vf6}
+(\sigma(s)f(s))_{fit}=h \frac{\prod_{n=1}^{N+1} \left( s-z_n\right)}{\prod_{n=1}^N \left( s-a'_n\right)}
+\end{equation} 
+
+\begin{equation}\label{eq:vf7}
+\sigma'(s)=\frac{\prod_{n=1}^N \left( s-z'_n\right)}{\prod_{n=1}^N \left( s-a'_n\right)}
+\end{equation} 
+
+Thus equation \ref{eq:vf5} becomes
+
+
+\begin{equation}\label{eq:vf8}
+f'(s)=\frac{(\sigma(s)f(s))_{fit}}{\sigma'(s)}=\frac{h \prod_{n=1}^{N+1} \left( s-z_n\right)}
+{\prod_{n=1}^N \left( s-z'_n\right)}
+\end{equation} 
+
+i.e. the poles of $f'(s)$, the approximation to $f(s)$ are equal to the zeros of $\sigma'(s)$.
+
+Appendix B of \cite{vfit1} states that the zeros of $\sigma'(s)$ may be found as the eigenvalues of the matrix $[H]$ where
+
+\begin{equation}
+\left[ H \right] = \left[ A \right] - \left( b \right) \left( c' \right)^T
+\end{equation}
+
+where $\left[ A \right]$ is a diagonal matrix of starting poles, $\left( b \right)$ is a column vector of ones and $ \left( c' \right)^T$ is a row vector of the residues, $c'$.
+
+It may be the case that some of the poles found by this procedure may be unstable i.e. they lie in the right hand side of the s-plane. If this is the case then the poles are stabilised by reversing the sign of the real part of the pole. 
+
+Once the new poles have been calculated, the residues in $f'(s)$ may be found by solution of equation \ref{eq:vf1}. A set of M linear equations in the unknowns $d$, $h$ and  $c_n$ is obtained by evaluating quation \ref{eq:vf1} at each frequency, $s_i$, $i=1..M$ and using the known poles, $a_n$, of $f'(s)$:
+
+\begin{equation}\label{eq:vf9}
+ d+s_i h+\sum_{n=1}^N \frac{c_n}{s_i-a_n} = f(s_i)
+\end{equation} 
+
+Again we have an overdetermined system of equations which may be solved in a least squares sense for $d$, $h$ and  $c_n$.
+
+The two stage process may be iterated using the newly found poles as the new starting poles in the process. This iteration converges rapidly.
+
+
+
+\subsection{Choice of model order}
+
+An important aspect to generating an effective function fit is the choice of model order. The model order should be chosen to be high enough so as to accurately reproduce the input data. At some point it is usually found that increasing the order of the approxmation no longer gives a significant improvement in the accuracy of the model fit. This point unually determines the optimum model order
 
 

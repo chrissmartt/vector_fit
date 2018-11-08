@@ -89,6 +89,9 @@ integer :: i,read_loop
 
 character*256 :: filename
 
+character(len=256)    :: argument
+integer               :: argument_length
+
 ! START
 
 write(*,*)'Enter the filename for the complex frequency domain data or 1-4 to run one of the internal test cases'
@@ -204,11 +207,34 @@ else
   write(*,*)'Enter the maximum number of iterations of the vector fit solution'
   read(*,*)max_iterations
   
+! set up the default process
   include_const_term=.TRUE.
   include_s_term=.TRUE.
   log_freq_starting_poles=.FALSE.
   complex_starting_poles=.TRUE.
+    
+! Check the command line arguments and set up the process accordingly
+
+  i=1
+10 CONTINUE
+  CALL get_command_argument(i , argument, argument_length)
+
+  if (argument_length.NE.0) then
   
+    if (argument.EQ.'const')    include_const_term=.TRUE.
+    if (argument.EQ.'noconst')  include_const_term=.FALSE.
+    if (argument.EQ.'sterm')    include_s_term=.TRUE.
+    if (argument.EQ.'nosterm')  include_s_term=.FALSE.
+    if (argument.EQ.'logf')     log_freq_starting_poles=.TRUE.
+    if (argument.EQ.'nologf')   log_freq_starting_poles=.FALSE.
+    if (argument.EQ.'cmplx')    complex_starting_poles=.TRUE.
+    if (argument.EQ.'nocmplx')  complex_starting_poles=.FALSE.
+  
+    i=i+1
+    GOTO 10
+  
+  end if
+
 end if
 
 ! Generate the staring poles
@@ -339,7 +365,7 @@ end do
 ! Write the poles, zeros and error to screen
 
 if(verbose) write(*,*)'CALLING write_coefficients'
-CALL write_coefficients(order,a,c,c_hat,d,h,fmin,fmax)
+CALL write_coefficients(order,a,c,c_hat,d,h,fmin,fmax,nf)
 
 ! write filter functions for plotting
 

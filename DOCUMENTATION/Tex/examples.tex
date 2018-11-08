@@ -1,3 +1,18 @@
 \section{Examples} \label{examples}
 
+In the directory TEST\_DATA/ there are three example datasets, a gnuplot file to plot the comparison between input data and function fit data along with a script to run Vfit and plot the comparison for a given model order and number of iterations.
 
+The script to run the examples is run as follows:
+
+run\_Vfit filename model\_order max\_iternations
+
+Examples:
+
+1. Data from the impedance of a 'realistic' capacitor model consisting of a 
+R L C series combination, R=85 mohms, L=43nH, C=1uF
+
+run\_Vfit CAPACITOR\_CJS\_Z.CSV 1 2
+
+2. Measured impedance data for port 1 of a band pass filter with short circuit port 2.
+
+run\_Vfit BPF\_SHORT\_Z.CSV 12 4 
